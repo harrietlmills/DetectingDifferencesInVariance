@@ -161,7 +161,7 @@ MA_analysis_CoV <- function(MA_dataset){
   CoV_results <- matrix(NA, nrow=nrow(MA_dataset), ncol=4)
   colnames(CoV_results) <- c("teststat", "pvalue", "estdiff", "sediff")
   for (i in 1:nrow(MA_dataset)){
-    CoV_results[i,] <- unlist(CoV_test_Kate(MA_dataset$Con_SD[i], MA_dataset$Con_Mean[i], MA_dataset$Con_N[i],
+    CoV_results[i,] <- unlist(CoV_test(MA_dataset$Con_SD[i], MA_dataset$Con_Mean[i], MA_dataset$Con_N[i],
                                             MA_dataset$Int_SD[i], MA_dataset$Int_Mean[i], MA_dataset$Int_N[i]))
   }
   
@@ -177,6 +177,30 @@ MA_analysis_CoV <- function(MA_dataset){
   return(data.frame(MA_table))
   
   
+}
+
+# function to calculate the CoV test (from summary statistics)
+CoV_test <- function(sd1, mean1, n1, sd2, mean2, n2){
+  # group 1
+  cvest1 <- sd1 / mean1
+  cvse1=(cvest1)/sqrt(2*n1)
+  
+  # group 2
+  cvest2 <- sd2 / mean2
+  cvse2=(cvest2)/sqrt(2*n2)
+  
+  # two sample test (to see if two populations have the same CoV) http://www.real-statistics.com/students-t-distribution/coefficient-of-variation-testing/
+  estdiff=cvest2-cvest1
+  estcomb=((n1-1)*cvest1+(n2-1)*cvest2)/(n1+n2-2)
+  vardiff=(  (estcomb^2)/(n1-1) + (estcomb^2)/(n2-1) )*(estcomb^2+0.5)
+  sediff=sqrt(vardiff)
+  teststat=(estdiff/sediff)^2 
+  
+  # pvalue
+  pvalue <- pchisq(teststat, df=1, lower.tail=FALSE)
+  
+  return(list(teststat=teststat, pvalue=pvalue,
+              estdiff=estdiff, sediff=sediff))
 }
 
 ### meta analysis with logVR - code adapted from Winkelbeiner 2019
