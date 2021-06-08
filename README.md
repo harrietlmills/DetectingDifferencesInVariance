@@ -1,5 +1,5 @@
 # Detecting Differences In Variance Between Trial Arms
-Code to accompany the paper "Detecting heterogeneity of intervention effects using analysise and meta-analysis of differences in variance between two arms" - currently in submission
+Code to accompany the paper "Detecting heterogeneity of intervention effects using analysise and meta-analysis of differences in variance between two arms" - awaiting publication at Epidemiology
 
 Authors: Harriet L Mills (a,b), Julian PT Higgins (a,b), Richard W Morris (b), David Kessler (b), Jon Heron (a,b), Nicola Wiles (b), George Davey Smith (a,b), Kate Tilling (a,b)
 
