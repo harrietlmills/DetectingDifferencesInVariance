@@ -104,11 +104,8 @@ CoV_test <- function(sd1, mean1, n1, sd2, mean2, n2){
   cvest2 <- sd2 / mean2
   cvse2=(cvest2)/sqrt(2*n2)
   
-  # two sample test (to see if two populations have the same CoV) http://www.real-statistics.com/students-t-distribution/coefficient-of-variation-testing/
   estdiff=cvest2-cvest1
-  estcomb=((n1-1)*cvest1+(n2-1)*cvest2)/(n1+n2-2)
-  vardiff=(  (estcomb^2)/(n1-1) + (estcomb^2)/(n2-1) )*(estcomb^2+0.5)
-  sediff=sqrt(vardiff)
+  sediff = sqrt( ((cvest1^2)/(n1-1))*(0.5+cvest1^2) + ((cvest2^2)/(n2-1))*(0.5+cvest2^2) )
   teststat=(estdiff/sediff)^2 
   
   # pvalue
@@ -243,12 +240,12 @@ TestResults["logVR", "p-value"] = logVR_pvalue
 
 
 ### Coefficient of Variation
-CoV_test <- CoV_test(sd(trial_data_noNA$outcome[trial_data_noNA$LME_allocation==0]), 
-                      mean(trial_data_noNA$outcome[trial_data_noNA$LME_allocation==0]),
-                      n1=sum(trial_data_noNA$LME_allocation==0),
-                      sd(trial_data_noNA$outcome[trial_data_noNA$LME_allocation==1]), 
-                      mean(trial_data_noNA$outcome[trial_data_noNA$LME_allocation==1]),
-                      n2=sum(trial_data_noNA$LME_allocation==1))
+CoV_test <- CoV_test(sd(trial_data_noNA$outcome[trial_data_noNA$allocation==1]), 
+                      mean(trial_data_noNA$outcome[trial_data_noNA$allocation==1]),
+                      n1=sum(trial_data_noNA$allocation==1),
+                      sd(trial_data_noNA$outcome[trial_data_noNA$allocation==2]), 
+                      mean(trial_data_noNA$outcome[trial_data_noNA$allocation==2]),
+                      n2=sum(trial_data_noNA$allocation==2))
 TestResults["Coefficient of Variation test", "Test statistic"] = CoV_test$teststat
 TestResults["Coefficient of Variation test", "p-value"] = CoV_test$pvalue
 

@@ -10,6 +10,8 @@
 library(meta) 
 library(metafor)
 
+options(stringsAsFactors = FALSE)
+
 ### load and format data
 # data should be in a data.frame, MA_data
 # with columns containing the summary data for each trial:
@@ -189,11 +191,8 @@ CoV_test <- function(sd1, mean1, n1, sd2, mean2, n2){
   cvest2 <- sd2 / mean2
   cvse2=(cvest2)/sqrt(2*n2)
   
-  # two sample test (to see if two populations have the same CoV) http://www.real-statistics.com/students-t-distribution/coefficient-of-variation-testing/
   estdiff=cvest2-cvest1
-  estcomb=((n1-1)*cvest1+(n2-1)*cvest2)/(n1+n2-2)
-  vardiff=(  (estcomb^2)/(n1-1) + (estcomb^2)/(n2-1) )*(estcomb^2+0.5)
-  sediff=sqrt(vardiff)
+  sediff = sqrt( ((cvest1^2)/(n1-1))*(0.5+cvest1^2) + ((cvest2^2)/(n2-1))*(0.5+cvest2^2) )
   teststat=(estdiff/sediff)^2 
   
   # pvalue
